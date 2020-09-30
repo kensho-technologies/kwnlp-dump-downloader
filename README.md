@@ -5,7 +5,7 @@ kwnlp_dump_downloader is a Python package to help you download raw [Wikimedia du
 # Quick Install (Requires Python >= 3.6)
 
 ```bash
-pip install kwnlp_dump_downloader
+pip install kwnlp-dump-downloader
 ```
 
 # Python Package
