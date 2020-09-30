@@ -38,6 +38,7 @@ setup(
     version=find_version(),
     description="Utility for downloading and checking the status of Wikimedia dumps.",
     long_description=find_long_description(),
+    long_description_content_type="text/markdown",
     url="https://github.com/kensho-technologies/kwnlp_dump_downloader",
     author="Kensho Technologies LLC.",
     author_email="kwnlp@kensho.com",
