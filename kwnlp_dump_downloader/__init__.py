@@ -1,5 +1,5 @@
 # Copyright 2020-present Kensho Technologies, LLC.
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 from kwnlp_dump_downloader.downloader import download_jobs
 from kwnlp_dump_downloader.dump_status import WdsFile
