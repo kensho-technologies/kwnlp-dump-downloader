@@ -34,3 +34,7 @@ def main() -> None:
         wiki=args.wiki,
         jobs_to_download=jobs_to_download,
     )
+
+
+if __name__ == "__main__":
+    main()

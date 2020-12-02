@@ -1,5 +1,6 @@
 # Copyright 2020-present Kensho Technologies, LLC.
 """Download wikimedia dumps."""
+from calendar import monthrange
 import datetime
 import logging
 import os
@@ -55,7 +56,7 @@ def _download_wikipedia_job(
             wget.download(download_url, out=out)
 
 
-def _download_pagecounts(
+def _download_pageviewcomplete(
     wp_yyyymmdd: str,
     out_path: str,
     mirror_url: str,
@@ -66,20 +67,24 @@ def _download_pagecounts(
         day=int(wp_yyyymmdd[6:8]),
     )
 
-    job_name = "pagecounts"
+    job_name = "pageviewcomplete"
     job_path = os.path.join(out_path, job_name)
     os.makedirs(job_path, exist_ok=True)
     wp_date_minus_one_month = wp_date.replace(day=1) - datetime.timedelta(days=1)
-    pagecounts_file = "pagecounts-{}-{:0>2d}-views-ge-5-totals.bz2".format(
-        wp_date_minus_one_month.year, wp_date_minus_one_month.month
-    )
-    download_url = "{}/other/pagecounts-ez/merged/{}".format(mirror_url, pagecounts_file)
-    out = os.path.join(job_path, pagecounts_file)
-    logger.info(f"downloading {job_name} from {download_url} to {out}")
-    if os.path.exists(out):
-        logger.info(f"{out} exists, skipping")
-    else:
-        wget.download(download_url, out=out)
+    year = wp_date_minus_one_month.year
+    month = wp_date_minus_one_month.month
+    _, days_in_month = monthrange(wp_date_minus_one_month.year, wp_date_minus_one_month.month)
+    for day in range(1, days_in_month + 1):
+
+        pageview_file = "pageviews-{}{:0>2d}{:0>2d}-user.bz2".format(year, month, day)
+        download_url = "{}/other/pageview_complete/{}/{}-{:0>2d}/{}".format(
+            mirror_url, year, year, month, pageview_file)
+        out = os.path.join(job_path, pageview_file)
+        logger.info(f"downloading {job_name} from {download_url} to {out}")
+        if os.path.exists(out):
+            logger.info(f"{out} exists, skipping")
+        else:
+            wget.download(download_url, out=out)
 
 
 def _download_wikidata(
@@ -117,11 +122,11 @@ def download_jobs(
     else:
         include_wikidata = False
 
-    if "pagecounts" in jobs_to_download:
-        include_pagecounts = True
-        jobs_to_download.remove("pagecounts")
+    if "pageviewcomplete" in jobs_to_download:
+        include_pageviewcomplete = True
+        jobs_to_download.remove("pageviewcomplete")
     else:
-        include_pagecounts = False
+        include_pageviewcomplete = False
 
     # get wikipedia dump status
     # =====================================================================
@@ -134,7 +139,7 @@ def download_jobs(
 
     # set output paths
     # =====================================================================
-    if jobs_to_download or include_pagecounts:
+    if jobs_to_download or include_pageviewcomplete:
         wikipedia_dumps_path = os.path.join(data_path, f"wikipedia-raw-{wp_yyyymmdd}")
         logger.info(f"wikipedia_dumps_path: {wikipedia_dumps_path}")
         os.makedirs(wikipedia_dumps_path, exist_ok=True)
@@ -144,10 +149,10 @@ def download_jobs(
         logger.info(f"wikidata_dumps_path: {wikidata_dumps_path}")
         os.makedirs(wikidata_dumps_path, exist_ok=True)
 
-    # download wikipedia pagecounts for the month previous to wp_yyyymmdd
+    # download wikipedia pageviewcomplete for the month previous to wp_yyyymmdd
     # =====================================================================
-    if include_pagecounts:
-        _download_pagecounts(wp_yyyymmdd, wikipedia_dumps_path, mirror_url)
+    if include_pageviewcomplete:
+        _download_pageviewcomplete(wp_yyyymmdd, wikipedia_dumps_path, mirror_url)
 
     # download wikipedia dumps
     # =====================================================================

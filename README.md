@@ -86,7 +86,7 @@ download_jobs(wp_yyyymmdd, wd_yyyymmdd, data_path=data_path, jobs_to_download=jo
 
 Any of the jobs listed in the status report above can be specified in the `jobs_to_download` kwarg. In addition, there are two special job strings,
 
-* `pagecounts`: used to download monthly pageviews (e.g. `pagecounts-2020-09-views-ge-5-totals.bz2`)
+* `pageviewcomplete`: used to download monthly pageviews (e.g. `pageviews-20200901-user.bz2`)
 * `wikidata`: used to download Wikidata json dumps (e.g. `wikidata-20200921-all.json.bz2`)
 
 
