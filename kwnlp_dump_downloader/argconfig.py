@@ -7,7 +7,7 @@ DEFAULT_KWNLP_DATA_PATH: str = ""
 DEFAULT_KWNLP_WIKI_MIRROR_URL: str = "https://dumps.wikimedia.org"
 DEFAULT_KWNLP_WIKI: str = "enwiki"
 DEFAULT_KWNLP_DOWNLOAD_JOBS: str = (
-    "pagecounts,pagetable,pagepropstable,redirecttable,articlesdump,wikidata"
+    "pageviewcomplete,pagetable,pagepropstable,redirecttable,articlesdump,wikidata"
 )
 DEFAULT_KWNLP_LOGGING_LEVEL: int = logging.INFO
 
